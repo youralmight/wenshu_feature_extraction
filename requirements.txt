@@ -31,3 +31,44 @@ tiktoken>=0.5.2
 langchain>=0.1.5
 langchainhub>=0.1.14
 arxiv>=2.1.0
+pandas
+
+
+numpy
+pytz
+matplotlib
+deepdiff
+dill
+pathos
+pip-search
+jstyleson
+icecream
+easydict
+gpustat
+tqdm
+natsort
+# rich
+# pandas
+
+
+
+# jupyter
+ipython
+# import-ipynb
+# ipynb
+# jupyter
+# jupyter_contrib_nbextensions 
+# jupyter_nbextensions_configurator # 
+# jupyter contrib nbextension install --user ; jupyter nbextensions_configurator enable --user ; echo toc2/main varInspector/main execute_time/ExecuteTime codefolding/main hide_input_all/main hinterland/hinterland freeze/main | xargs -n1 jupyter nbextension enable
+
+
+# formatting
+black
+pycodestyle
+autopep8
+pylint
+
+# # torch related
+# torch
+# lightning
+# jsonargparse[signatures]

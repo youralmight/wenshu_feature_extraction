@@ -9,3 +9,5 @@ AdvertiseGen/
 *.gz
 *.idea
 .DS_Store
+.vscode
+wenshu2
