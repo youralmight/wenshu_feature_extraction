@@ -11,3 +11,4 @@ AdvertiseGen/
 .DS_Store
 .vscode
 wenshu2
+*.log
