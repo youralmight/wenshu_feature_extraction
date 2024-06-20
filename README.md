@@ -1,339 +1,268 @@
-# ChatGLM3
+# GLM-4
 
 <p align="center">
-🤗 <a href="https://huggingface.co/THUDM/chatglm3-6b" target="_blank">HF Repo</a> • 🤖 <a href="https://modelscope.cn/models/ZhipuAI/chatglm3-6b" target="_blank">ModelScope</a> • 🤖 <a href="https://www.wisemodel.cn/models/ZhipuAI/chatglm3-6b" target="_blank">WiseModel</a> • 🐦 <a href="https://twitter.com/thukeg" target="_blank">Twitter</a> • 📃 <a href="https://arxiv.org/abs/2103.10360" target="_blank">[GLM@ACL 22]</a> <a href="https://github.com/THUDM/GLM" target="_blank">[GitHub]</a> • 📃 <a href="https://arxiv.org/abs/2210.02414" target="_blank">[GLM-130B@ICLR 23]</a> <a href="https://github.com/THUDM/GLM-130B" target="_blank">[GitHub]</a> <br>
+🤗 <a href="https://huggingface.co/collections/THUDM/glm-4-665fcf188c414b03c2f7e3b7" target="_blank">HF Repo</a> • 🤖 <a href="https://modelscope.cn/models/ZhipuAI/glm-4-9b-chat" target="_blank">ModelScope</a> • 🟣 <a href="https://wisemodel.cn/models/ZhipuAI/glm-4-9b-chat" target="_blank">WiseModel</a> • 🐦 <a href="https://twitter.com/thukeg" target="_blank">Twitter</a> • 👋 加入我们的 <a href="https://discord.gg/fK2dz4bg" target="_blank">Discord</a> 和 <a href="resources/WECHAT.md" target="_blank">微信</a>
 </p>
 <p align="center">
-    👋 加入我们的 <a href="https://join.slack.com/t/chatglm/shared_invite/zt-25ti5uohv-A_hs~am_D3Q8XPZMpj7wwQ" target="_blank">Slack</a> 和 <a href="resources/WECHAT.md" target="_blank">微信</a>
-</p>
-<p align="center">
-📍在 <a href="https://www.chatglm.cn">chatglm.cn</a> 体验更大规模的 ChatGLM 模型。
+📍在 <a href="https://open.bigmodel.cn/?utm_campaign=open&_channel_track_key=OWTVNma9">智谱AI开放平台</a> 体验和使用更大规模的 GLM 商业模型。
 </p>
 
-[Read this in English.](./README_en.md)
+Read this in [English](README_en.md)
 
-📔 关于`ChatGLM3-6B`
-更为详细的使用信息，可以参考
+## 模型介绍
 
-+ [ChatGLM3 开放技术文档](https://lslfd0slxc.feishu.cn/wiki/WvQbwIJ9tiPAxGk8ywDck6yfnof?from=from_copylink)
-+ [Bilibili video](https://www.bilibili.com/video/BV1uC4y1J7yA)
-+ [YouTube video](https://www.youtube.com/watch?v=Pw9PB6R7ORA)
+GLM-4-9B 是智谱 AI 推出的最新一代预训练模型 GLM-4 系列中的开源版本。 在语义、数学、推理、代码和知识等多方面的数据集测评中，
+**GLM-4-9B** 及其人类偏好对齐的版本 **GLM-4-9B-Chat** 均表现出超越 Llama-3-8B 的卓越性能。除了能进行多轮对话，GLM-4-9B-Chat
+还具备网页浏览、代码执行、自定义工具调用（Function Call）和长文本推理（支持最大 128K 上下文）等高级功能。本代模型增加了多语言支持，支持包括日语，韩语，德语在内的
+26 种语言。我们还推出了支持 1M 上下文长度（约 200 万中文字符）的 **GLM-4-9B-Chat-1M** 模型和基于 GLM-4-9B 的多模态模型
+GLM-4V-9B。**GLM-4V-9B** 具备 1120 * 1120 高分辨率下的中英双语多轮对话能力，在中英文综合能力、感知推理、文字识别、图表理解等多方面多模态评测中，GLM-4V-9B
+表现出超越 GPT-4-turbo-2024-04-09、Gemini 1.0 Pro、Qwen-VL-Max 和 Claude 3 Opus 的卓越性能。
 
-## GLM-4 介绍
+## Model List
 
-我们已经发布最新的 **GLM-4** 模型，该模型在多个指标上有了新的突破，您可以在以下两个渠道体验我们的最新模型。
-
-+ [智谱清言](https://www.chatglm.cn) 体验最新版 GLM-4，包括 **GLMs，All tools**等功能，下载 智谱清言 APP
-  或者使用 [网页端](https://www.chatglm.cn)。
-+ [API平台](https://open.bigmodel.cn/) 新一代 API 平台已经上线，您可以直接在 API
-  平台上体验 `GLM-4`、`GLM-3-Turbo`、`CharacterGLM-3`，`CogView-3` 等新模型。
-  其中`GLM-4`、`GLM-3-Turbo`两个模型支持了 `System Prompt`、`Function Call`、 `Retrieval`、`Web_Search`等新功能，欢迎体验。
-
-+ [GLM4 API 开源教程](https://github.com/MetaGLM/glm-cookbook/) GLM-4 API教程和基础应用，欢迎尝试。
-  API相关问题可以在本开源教程疑问，或者使用[GLM-4 API AI助手](https://open.bigmodel.cn/shareapp/v1/?share_code=sQwt5qyqYVaNh1O_87p8O)
-  来获得常见问题的帮助。
-
------
-
-## ChatGLM3 介绍
-
-**ChatGLM3** 是智谱AI和清华大学 KEG 实验室联合发布的对话预训练模型。ChatGLM3-6B 是 ChatGLM3
-系列中的开源模型，在保留了前两代模型对话流畅、部署门槛低等众多优秀特性的基础上，ChatGLM3-6B 引入了如下特性：
-
-1. **更强大的基础模型：** ChatGLM3-6B 的基础模型 ChatGLM3-6B-Base
-   采用了更多样的训练数据、更充分的训练步数和更合理的训练策略。在语义、数学、推理、代码、知识等不同角度的数据集上测评显示，*
-   *ChatGLM3-6B-Base 具有在 10B 以下的基础模型中最强的性能**。
-2. **更完整的功能支持：** ChatGLM3-6B 采用了全新设计的 [Prompt 格式](PROMPT.md)
-   ，除正常的多轮对话外。同时原生支持[工具调用](tools_using_demo/README.md)（Function Call）、代码执行（Code Interpreter）和
-   Agent 任务等复杂场景。
-3. **更全面的开源序列：** 除了对话模型 [ChatGLM3-6B](https://huggingface.co/THUDM/chatglm3-6b)
-   外，还开源了基础模型 [ChatGLM3-6B-Base](https://huggingface.co/THUDM/chatglm3-6b-base)
-   、长文本对话模型 [ChatGLM3-6B-32K](https://huggingface.co/THUDM/chatglm3-6b-32k)。以上所有权重对学术研究**完全开放**
-   ，在填写 [问卷](https://open.bigmodel.cn/mla/form) 进行登记后**亦允许免费商业使用**。
-
------
-
-ChatGLM3 开源模型旨在与开源社区一起推动大模型技术发展，恳请开发者和大家遵守 [开源协议](MODEL_LICENSE)
-，勿将开源模型和代码及基于开源项目产生的衍生物用于任何可能给国家和社会带来危害的用途以及用于任何未经过安全评估和备案的服务。目前，本项目团队未基于
-**ChatGLM3 开源模型**开发任何应用，包括网页端、安卓、苹果 iOS 及 Windows App 等应用。
-
-尽管模型在训练的各个阶段都尽力确保数据的合规性和准确性，但由于 ChatGLM3-6B
-模型规模较小，且模型受概率随机性因素影响，无法保证输出内容的准确。同时模型的输出容易被用户的输入误导。*
-*本项目不承担开源模型和代码导致的数据安全、舆情风险或发生任何模型被误导、滥用、传播、不当利用而产生的风险和责任。**
-
-## 模型列表
-
-|      Model       | Seq Length |                                                                                                   Download                                                                                                   
-|:----------------:|:----------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:
-|   ChatGLM3-6B    |     8k     |        [HuggingFace](https://huggingface.co/THUDM/chatglm3-6b) \| [ModelScope](https://modelscope.cn/models/ZhipuAI/chatglm3-6b) \| [WiseModel](https://www.wisemodel.cn/models/ZhipuAI/chatglm3-6b)         
-| ChatGLM3-6B-Base |     8k     | [HuggingFace](https://huggingface.co/THUDM/chatglm3-6b-base) \| [ModelScope](https://modelscope.cn/models/ZhipuAI/chatglm3-6b-base) \| [WiseModel](https://www.wisemodel.cn/models/ZhipuAI/chatglm3-6b-base) 
-| ChatGLM3-6B-32K  |    32k     |  [HuggingFace](https://huggingface.co/THUDM/chatglm3-6b-32k) \| [ModelScope](https://modelscope.cn/models/ZhipuAI/chatglm3-6b-32k) \| [WiseModel](https://www.wisemodel.cn/models/ZhipuAI/chatglm3-6b-32k)   
-
-请注意，所有模型的最新更新都会在 Huggingface 率先发布。 ModelScope 和 WiseModel 由于没有与 Huggingface 同步，需要开发人员手动更新，可能会在
-Huggingface 更新后一段时间内同步更新。
+| Model            | Type | Seq Length | Download                                                                                                                                | Online Demo                                                                                                                                                                                |
+|------------------|------|------------|-----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| GLM-4-9B         | Base | 8K         | [🤗 Huggingface](https://huggingface.co/THUDM/glm-4-9b)  [🤖 ModelScope](https://modelscope.cn/models/ZhipuAI/glm-4-9b)   [🟣 WiseModel](https://wisemodel.cn/models/ZhipuAI/glm-4-9b)    | /                                                                                                                                                                                          |
+| GLM-4-9B-Chat    | Chat | 128K       | [🤗 Huggingface](https://huggingface.co/THUDM/glm-4-9b-chat)  [🤖 ModelScope](https://modelscope.cn/models/ZhipuAI/glm-4-9b-chat)   [🟣 WiseModel](https://wisemodel.cn/models/ZhipuAI/GLM-4-9B-Chat)      | [🤖 ModelScope CPU](https://modelscope.cn/studios/dash-infer/GLM-4-Chat-DashInfer-Demo/summary)<br> [🤖 ModelScope vLLM](https://modelscope.cn/studios/ZhipuAI/glm-4-9b-chat-vllm/summary) |
+| GLM-4-9B-Chat-1M | Chat | 1M         | [🤗 Huggingface](https://huggingface.co/THUDM/glm-4-9b-chat-1m)  [🤖 ModelScope](https://modelscope.cn/models/ZhipuAI/glm-4-9b-chat-1m)  [🟣 WiseModel](https://wisemodel.cn/models/ZhipuAI/GLM-4-9B-Chat-1M)  | /                                                                                                                                                                                          |
+| GLM-4V-9B        | Chat | 8K         | [🤗 Huggingface](https://huggingface.co/THUDM/glm-4v-9b)  [🤖 ModelScope](https://modelscope.cn/models/ZhipuAI/glm-4v-9b)   [🟣 WiseModel](https://wisemodel.cn/models/ZhipuAI/GLM-4V-9B  )    | [🤖 ModelScope](https://modelscope.cn/studios/ZhipuAI/glm-4v-9b-Demo/summary)                                                                                                              |
 
 ## 友情链接
 
-以下优秀开源仓库已经对 ChatGLM3-6B 模型深度支持，欢迎大家扩展学习。
+以下优秀开源仓库已经对 GLM-4-9B 模型深度支持，欢迎大家扩展学习。
 
 推理加速：
 
 * [chatglm.cpp](https://github.com/li-plus/chatglm.cpp): 类似 llama.cpp 的量化加速推理方案，实现笔记本上实时对话
-* [ChatGLM3-TPU](https://github.com/sophgo/ChatGLM3-TPU): 采用TPU加速推理方案，在算能端侧芯片BM1684X（16T@FP16，内存16G）上实时运行约7.5
-  token/s
-* [TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM/tree/main):
-  NVIDIA开发的高性能GPU加速推理方案，可以参考此[步骤](./tensorrt_llm_demo/README.md)部署ChatGLM3
-
-高效微调：
-
-* [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory): 优秀易上手的高效微调框架。
-
-应用框架：
-
-* [LangChain-Chatchat](https://github.com/chatchat-space/Langchain-Chatchat): 基于 ChatGLM 等大语言模型与 Langchain
-  等应用框架实现，开源、可离线部署的检索增强生成(RAG)大模型知识库项目。
-
-* [BISHENG](https://github.com/dataelement/bisheng): 开源大模型应用开发平台,赋能和加速大模型应用开发落地，帮助用户以最佳体验进入下一代应用开发模式。
 
 ## 评测结果
 
-### 典型任务
+### 对话模型典型任务
 
-我们选取了 8 个中英文典型数据集，在 ChatGLM3-6B (base) 版本上进行了性能测试。
+| Model               | AlignBench | MT-Bench | IFEval | MMLU | C-Eval | GSM8K | MATH | HumanEval | NaturalCodeBench |
+|:--------------------|:----------:|:--------:|:------:|:----:|:------:|:-----:|:----:|:---------:|:----------------:|
+| Llama-3-8B-Instruct |    6.40    |   8.00   |  68.6  | 68.4 |  51.3  | 79.6  | 30.0 |   62.2    |       24.7       |
+| ChatGLM3-6B         |    5.18    |   5.50   |  28.1  | 61.4 |  69.0  | 72.3  | 25.7 |   58.5    |       11.3       |
+| GLM-4-9B-Chat       |    7.01    |   8.35   |  69.0  | 72.4 |  75.6  | 79.6  | 50.6 |   71.8    |       32.2       |
 
-| Model            | GSM8K | MATH | BBH  | MMLU | C-Eval | CMMLU | MBPP | AGIEval |
-|------------------|:-----:|:----:|:----:|:----:|:------:|:-----:|:----:|:-------:|
-| ChatGLM2-6B-Base | 32.4  | 6.5  | 33.7 | 47.9 |  51.7  | 50.0  |  -   |    -    |
-| Best Baseline    | 52.1  | 13.1 | 45.0 | 60.1 |  63.5  | 62.2  | 47.5 |  45.8   
-| ChatGLM3-6B-Base | 72.3  | 25.7 | 66.1 | 61.4 |  69.0  | 67.5  | 52.4 |  53.7   |
+### 基座模型典型任务
 
-> Best Baseline 指的是截止 2023年10月27日、模型参数在 10B 以下、在对应数据集上表现最好的预训练模型，不包括只针对某一项任务训练而未保持通用能力的模型。
+| Model               | MMLU | C-Eval | GPQA | GSM8K | MATH | HumanEval |
+|:--------------------|:----:|:------:|:----:|:-----:|:----:|:---------:|
+| Llama-3-8B          | 66.6 |  51.2  |  -   | 45.8  |  -   |   33.5    | 
+| Llama-3-8B-Instruct | 68.4 |  51.3  | 34.2 | 79.6  | 30.0 |   62.2    |
+| ChatGLM3-6B-Base    | 61.4 |  69.0  | 26.8 | 72.3  | 25.7 |   58.5    |
+| GLM-4-9B            | 74.7 |  77.1  | 34.3 | 84.0  | 30.4 |   70.1    |
 
-> 对 ChatGLM3-6B-Base 的测试中，BBH 采用 3-shot 测试，需要推理的 GSM8K、MATH 采用 0-shot CoT 测试，MBPP 采用 0-shot
-> 生成后运行测例计算 Pass@1 ，其他选择题类型数据集均采用 0-shot 测试。
+> 由于 `GLM-4-9B` 在预训练过程中加入了部分数学、推理、代码相关的 instruction 数据，所以将 Llama-3-8B-Instruct 也列入比较范围。
 
-我们在多个长文本应用场景下对 ChatGLM3-6B-32K 进行了人工评估测试。与二代模型相比，其效果平均提升了超过
-50%。在论文阅读、文档摘要和财报分析等应用中，这种提升尤为显著。此外，我们还在 LongBench 评测集上对模型进行了测试，具体结果如下表所示
+### 长文本
 
-| Model           |  平均  | Summary | Single-Doc QA | Multi-Doc QA | Code | Few-shot | Synthetic | 
-|-----------------|:----:|:-------:|:-------------:|:------------:|:----:|:--------:|:---------:|
-| ChatGLM2-6B-32K | 41.5 |  24.8   |     37.6      |     34.7     | 52.8 |   51.3   |   47.7    | 
-| ChatGLM3-6B-32K | 50.2 |  26.6   |     45.8      |     46.1     | 56.2 |   61.2   |    65     |
+在 1M 的上下文长度下进行[大海捞针实验](https://github.com/LargeWorldModel/LWM/blob/main/scripts/eval_needle.py)，结果如下：
 
-## 使用方式
+![needle](resources/eval_needle.jpeg)
 
-### 环境安装
+在 LongBench-Chat 上对长文本能力进行了进一步评测，结果如下:
 
-首先需要下载本仓库：
+<p align="center">
+<img src="resources/longbench.png" alt="描述文字" style="display: block; margin: auto; width: 65%;">
+</p>
 
-```shell
-git clone https://github.com/THUDM/ChatGLM3
-cd ChatGLM3
-```
+### 多语言能力
 
-然后使用 pip 安装依赖：
+在六个多语言数据集上对 GLM-4-9B-Chat 和 Llama-3-8B-Instruct 进行了测试，测试结果及数据集对应选取语言如下表
 
-```
-pip install -r requirements.txt
-```
+| Dataset     | Llama-3-8B-Instruct | GLM-4-9B-Chat |                                           Languages                                            |
+|:------------|:-------------------:|:-------------:|:----------------------------------------------------------------------------------------------:|
+| M-MMLU      |        49.6         |     56.6      |                                              all                                               |
+| FLORES      |        25.0         |     28.8      | ru, es, de, fr, it, pt, pl, ja, nl, ar, tr, cs, vi, fa, hu, el, ro, sv, uk, fi, ko, da, bg, no |
+| MGSM        |        54.0         |     65.3      |                           zh, en, bn, de, es, fr, ja, ru, sw, te, th                           |
+| XWinograd   |        61.7         |     73.1      |                                     zh, en, fr, jp, ru, pt                                     |
+| XStoryCloze |        84.7         |     90.7      |                           zh, en, ar, es, eu, hi, id, my, ru, sw, te                           |
+| XCOPA       |        73.3         |     80.1      |                           zh, et, ht, id, it, qu, sw, ta, th, tr, vi                           |
 
-+ 为了保证 `torch` 的版本正确，请严格按照 [官方文档](https://pytorch.org/get-started/locally/) 的说明安装。
+### 工具调用能力
 
-### 综合 Demo
+我们在 [Berkeley Function Calling Leaderboard](https://github.com/ShishirPatil/gorilla/tree/main/berkeley-function-call-leaderboard)
+上进行了测试并得到了以下结果：
 
-我们提供了一个集成以下三种功能的综合 Demo，运行方法请参考[综合 Demo](composite_demo/README.md)
+| Model                  | Overall Acc. | AST Summary | Exec Summary | Relevance |
+|:-----------------------|:------------:|:-----------:|:------------:|:---------:|
+| Llama-3-8B-Instruct    |    58.88     |    59.25    |    70.01     |   45.83   |
+| gpt-4-turbo-2024-04-09 |    81.24     |    82.14    |    78.61     |   88.75   |
+| ChatGLM3-6B            |    57.88     |    62.18    |    69.78     |   5.42    |
+| GLM-4-9B-Chat          |    81.00     |    80.26    |    84.40     |   87.92   |
 
-- Chat: 对话模式，在此模式下可以与模型进行对话。
-- Tool: 工具模式，模型除了对话外，还可以通过工具进行其他操作。
+### 多模态能力
 
-<img src="resources/tool.png" width="400">
+GLM-4V-9B 是一个多模态语言模型，具备视觉理解能力，其相关经典任务的评测结果如下：
 
-- Code Interpreter: 代码解释器模式，模型可以在一个 Jupyter 环境中执行代码并获取结果，以完成复杂任务。
+|                            | **MMBench-EN-Test** | **MMBench-CN-Test** | **SEEDBench_IMG** | **MMStar** | **MMMU** | **MME** | **HallusionBench** | **AI2D** | **OCRBench** |
+|----------------------------|---------------------|---------------------|-------------------|------------|----------|---------|--------------------|----------|--------------|
+| **gpt-4o-2024-05-13**      | 83.4                | 82.1                | 77.1              | 63.9       | 69.2     | 2310.3  | 55.0               | 84.6     | 736          |
+| **gpt-4-turbo-2024-04-09** | 81.0                | 80.2                | 73.0              | 56.0       | 61.7     | 2070.2  | 43.9               | 78.6     | 656          |
+| **gpt-4-1106-preview**     | 77.0                | 74.4                | 72.3              | 49.7       | 53.8     | 1771.5  | 46.5               | 75.9     | 516          |
+| **InternVL-Chat-V1.5**     | 82.3                | 80.7                | 75.2              | 57.1       | 46.8     | 2189.6  | 47.4               | 80.6     | 720          |
+| **LLaVA-Next-Yi-34B**      | 81.1                | 79.0                | 75.7              | 51.6       | 48.8     | 2050.2  | 34.8               | 78.9     | 574          |
+| **Step-1V**                | 80.7                | 79.9                | 70.3              | 50.0       | 49.9     | 2206.4  | 48.4               | 79.2     | 625          |
+| **MiniCPM-Llama3-V2.5**    | 77.6                | 73.8                | 72.3              | 51.8       | 45.8     | 2024.6  | 42.4               | 78.4     | 725          |
+| **Qwen-VL-Max**            | 77.6                | 75.7                | 72.7              | 49.5       | 52.0     | 2281.7  | 41.2               | 75.7     | 684          |
+| **Gemini 1.0 Pro**         | 73.6                | 74.3                | 70.7              | 38.6       | 49.0     | 2148.9  | 45.7               | 72.9     | 680          |
+| **Claude 3 Opus**          | 63.3                | 59.2                | 64.0              | 45.7       | 54.9     | 1586.8  | 37.8               | 70.6     | 694          |
+| **GLM-4V-9B**              | 81.1                | 79.4                | 76.8              | 58.7       | 47.2     | 2163.8  | 46.6               | 81.1     | 786          |
 
-<img src="resources/heart.png" width="400">
+## 快速调用
 
-### 代码调用
+**硬件配置和系统要求，请查看[这里](basic_demo/README.md)。**
 
-可以通过如下代码调用 ChatGLM 模型来生成对话：
+### 使用以下方法快速调用 GLM-4-9B-Chat 语言模型
 
-```python
->> > from transformers import AutoTokenizer, AutoModel
->> > tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True)
->> > model = AutoModel.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True, device='cuda')
->> > model = model.eval()
->> > response, history = model.chat(tokenizer, "你好", history=[])
->> > print(response)
-你好👋!我是人工智能助手
-ChatGLM3 - 6
-B, 很高兴见到你, 欢迎问我任何问题。
->> > response, history = model.chat(tokenizer, "晚上睡不着应该怎么办", history=history)
->> > print(response)
-晚上睡不着可能会让你感到焦虑或不舒服, 但以下是一些可以帮助你入睡的方法:
-
-1.
-制定规律的睡眠时间表: 保持规律的睡眠时间表可以帮助你建立健康的睡眠习惯, 使你更容易入睡。尽量在每天的相同时间上床, 并在同一时间起床。
-2.
-创造一个舒适的睡眠环境: 确保睡眠环境舒适, 安静, 黑暗且温度适宜。可以使用舒适的床上用品, 并保持房间通风。
-3.
-放松身心: 在睡前做些放松的活动, 例如泡个热水澡, 听些轻柔的音乐, 阅读一些有趣的书籍等, 有助于缓解紧张和焦虑, 使你更容易入睡。
-4.
-避免饮用含有咖啡因的饮料: 咖啡因是一种刺激性物质, 会影响你的睡眠质量。尽量避免在睡前饮用含有咖啡因的饮料, 例如咖啡, 茶和可乐。
-5.
-避免在床上做与睡眠无关的事情: 在床上做些与睡眠无关的事情, 例如看电影, 玩游戏或工作等, 可能会干扰你的睡眠。
-6.
-尝试呼吸技巧: 深呼吸是一种放松技巧, 可以帮助你缓解紧张和焦虑, 使你更容易入睡。试着慢慢吸气, 保持几秒钟, 然后缓慢呼气。
-
-如果这些方法无法帮助你入睡, 你可以考虑咨询医生或睡眠专家, 寻求进一步的建议。
-```
-
-#### 从本地加载模型
-
-以上代码会由 `transformers`
-自动下载模型实现和参数。完整的模型实现在 [Hugging Face Hub](https://huggingface.co/THUDM/chatglm3-6b)
-。如果你的网络环境较差，下载模型参数可能会花费较长时间甚至失败。此时可以先将模型下载到本地，然后从本地加载。
-
-从 Hugging Face Hub
-下载模型需要先[安装Git LFS](https://docs.github.com/zh/repositories/working-with-files/managing-large-files/installing-git-large-file-storage)
-，然后运行
-
-```Shell
-git clone https://huggingface.co/THUDM/chatglm3-6b
-```
-
-如果从你从 HuggingFace 下载比较慢，也可以从 [ModelScope](https://modelscope.cn/models/ZhipuAI/chatglm3-6b)
-中下载。
-
-### 模型微调
-
-我们提供了一个微调 ChatGLM3-6B 模型的基础套件，可以用来微调 ChatGLM3-6B 模型。微调套件的使用方法请参考
-[微调套件](finetune_demo/README.md)。
-
-### 网页版对话 Demo
-
-![web-demo](resources/web-demo.gif)
-可以通过以下命令启动基于 Gradio 的网页版 demo：
-
-```shell
-python web_demo_gradio.py
-```
-
-![web-demo](resources/web-demo2.png)
-
-可以通过以下命令启动基于 Streamlit 的网页版 demo：
-
-```shell
-streamlit run web_demo_streamlit.py
-```
-
-网页版 demo 会运行一个 Web Server，并输出地址。在浏览器中打开输出的地址即可使用。 经测试，基于 Streamlit 的网页版 Demo 会更流畅。
-
-### 命令行对话 Demo
-
-![cli-demo](resources/cli-demo.png)
-
-运行仓库中 [cli_demo.py](basic_demo/cli_demo.py)：
-
-```shell
-python cli_demo.py
-```
-
-程序会在命令行中进行交互式的对话，在命令行中输入指示并回车即可生成回复，输入 `clear` 可以清空对话历史，输入 `stop` 终止程序。
-
-### LangChain Demo
-
-代码实现请参考 [LangChain Demo](langchain_demo/README.md)。
-
-#### 工具调用
-
-关于工具调用的方法请参考 [工具调用](tools_using_demo/README.md)。
-
-#### OpenAI API / Zhipu API Demo
-
-我们已经推出了 OpenAI / ZhipuAI 格式的 开源模型 API 部署代码，可以作为任意基于 ChatGPT 的应用的后端。
-目前，可以通过运行仓库中的 [api_server.py](openai_api_demo/api_server.py) 进行部署
-
-```shell
-cd openai_api_demo
-python api_server.py
-```
-
-同时，我们也书写了一个示例代码，用来测试API调用的性能。
-
-+ OpenAI 测试脚本：[openai_api_request.py](openai_api_demo/openai_api_request.py)
-+ ZhipuAI 测试脚本：[zhipu_api_request.py](openai_api_demo/zhipu_api_request.py)
-+ 使用Curl进行测试
-
-```shell
-curl -X POST "http://127.0.0.1:8000/v1/chat/completions" \
--H "Content-Type: application/json" \
--d "{\"model\": \"chatglm3-6b\", \"messages\": [{\"role\": \"system\", \"content\": \"You are ChatGLM3, a large language model trained by Zhipu.AI. Follow the user's instructions carefully. Respond using markdown.\"}, {\"role\": \"user\", \"content\": \"你好，给我讲一个故事，大概100字\"}], \"stream\": false, \"max_tokens\": 100, \"temperature\": 0.8, \"top_p\": 0.8}"
-````
-
-+ 使用Python进行测试
-
-```shell
-cd openai_api_demo
-python openai_api_request.py
-```
-
-如果测试成功，则模型应该返回一段故事。
-
-## 低成本部署
-
-### 模型量化
-
-默认情况下，模型以 FP16 精度加载，运行上述代码需要大概 13GB 显存。如果你的 GPU 显存有限，可以尝试以量化方式加载模型，使用方法如下：
+使用 transformers 后端进行推理:
 
 ```python
-model = AutoModel.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True).quantize(4).cuda()
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+device = "cuda"
+
+tokenizer = AutoTokenizer.from_pretrained("THUDM/glm-4-9b-chat", trust_remote_code=True)
+
+query = "你好"
+
+inputs = tokenizer.apply_chat_template([{"role": "user", "content": query}],
+                                       add_generation_prompt=True,
+                                       tokenize=True,
+                                       return_tensors="pt",
+                                       return_dict=True
+                                       )
+
+inputs = inputs.to(device)
+model = AutoModelForCausalLM.from_pretrained(
+    "THUDM/glm-4-9b-chat",
+    torch_dtype=torch.bfloat16,
+    low_cpu_mem_usage=True,
+    trust_remote_code=True
+).to(device).eval()
+
+gen_kwargs = {"max_length": 2500, "do_sample": True, "top_k": 1}
+with torch.no_grad():
+    outputs = model.generate(**inputs, **gen_kwargs)
+    outputs = outputs[:, inputs['input_ids'].shape[1]:]
+    print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 ```
 
-模型量化会带来一定的性能损失，经过测试，ChatGLM3-6B 在 4-bit 量化下仍然能够进行自然流畅的生成。
-
-### CPU 部署
-
-如果你没有 GPU 硬件的话，也可以在 CPU 上进行推理，但是推理速度会更慢。使用方法如下（需要大概 32GB 内存）
+使用 vLLM 后端进行推理:
 
 ```python
-model = AutoModel.from_pretrained("THUDM/chatglm3-6b", trust_remote_code=True).float()
+from transformers import AutoTokenizer
+from vllm import LLM, SamplingParams
+
+# GLM-4-9B-Chat-1M
+# max_model_len, tp_size = 1048576, 4
+# 如果遇见 OOM 现象，建议减少max_model_len，或者增加tp_size
+max_model_len, tp_size = 131072, 1
+model_name = "THUDM/glm-4-9b-chat"
+prompt = [{"role": "user", "content": "你好"}]
+
+tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+llm = LLM(
+    model=model_name,
+    tensor_parallel_size=tp_size,
+    max_model_len=max_model_len,
+    trust_remote_code=True,
+    enforce_eager=True,
+    # GLM-4-9B-Chat-1M 如果遇见 OOM 现象，建议开启下述参数
+    # enable_chunked_prefill=True,
+    # max_num_batched_tokens=8192
+)
+stop_token_ids = [151329, 151336, 151338]
+sampling_params = SamplingParams(temperature=0.95, max_tokens=1024, stop_token_ids=stop_token_ids)
+
+inputs = tokenizer.apply_chat_template(prompt, tokenize=False, add_generation_prompt=True)
+outputs = llm.generate(prompts=inputs, sampling_params=sampling_params)
+
+print(outputs[0].outputs[0].text)
 ```
 
-### Mac 部署
+### 使用以下方法快速调用 GLM-4V-9B 多模态模型
 
-对于搭载了 Apple Silicon 或者 AMD GPU 的 Mac，可以使用 MPS 后端来在 GPU 上运行 ChatGLM3-6B。需要参考 Apple
-的 [官方说明](https://developer.apple.com/metal/pytorch) 安装 PyTorch-Nightly（正确的版本号应该是2.x.x.dev2023xxxx，而不是
-2.x.x）。
-
-目前在 MacOS 上只支持[从本地加载模型](README.md#从本地加载模型)。将代码中的模型加载改为从本地加载，并使用 mps 后端：
+使用 transformers 后端进行推理:
 
 ```python
-model = AutoModel.from_pretrained("your local path", trust_remote_code=True).to('mps')
+import torch
+from PIL import Image
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+device = "cuda"
+
+tokenizer = AutoTokenizer.from_pretrained("THUDM/glm-4v-9b", trust_remote_code=True)
+
+query = '描述这张图片'
+image = Image.open("your image").convert('RGB')
+inputs = tokenizer.apply_chat_template([{"role": "user", "image": image, "content": query}],
+                                       add_generation_prompt=True, tokenize=True, return_tensors="pt",
+                                       return_dict=True)  # chat mode
+
+inputs = inputs.to(device)
+model = AutoModelForCausalLM.from_pretrained(
+    "THUDM/glm-4v-9b",
+    torch_dtype=torch.bfloat16,
+    low_cpu_mem_usage=True,
+    trust_remote_code=True
+).to(device).eval()
+
+gen_kwargs = {"max_length": 2500, "do_sample": True, "top_k": 1}
+with torch.no_grad():
+    outputs = model.generate(**inputs, **gen_kwargs)
+    outputs = outputs[:, inputs['input_ids'].shape[1]:]
+    print(tokenizer.decode(outputs[0]))
 ```
 
-加载半精度的 ChatGLM3-6B 模型需要大概 13GB 内存。内存较小的机器（比如 16GB 内存的 MacBook
-Pro），在空余内存不足的情况下会使用硬盘上的虚拟内存，导致推理速度严重变慢。
+注意: GLM-4V-9B 暂不支持使用 vLLM 方式调用。
 
-### 多卡部署
+## 完整项目列表
 
-如果你有多张 GPU，但是每张 GPU 的显存大小都不足以容纳完整的模型，那么可以将模型切分在多张GPU上。首先安装
-accelerate: `pip install accelerate`，然后即可正常加载模型。
+如果你想更进一步了解 GLM-4-9B 系列开源模型，本开源仓库通过以下内容为开发者提供基础的 GLM-4-9B的使用和开发代码
 
-### TensorRT-LLM Demo
++ [basic_demo](basic_demo/README.md): 在这里包含了
+    + 使用 transformers 和 vLLM 后端的交互代码
+    + OpenAI API 后端交互代码
+    + Batch 推理代码
 
-ChatGLM3-6B已经支持使用 TensorRT-LLM
-工具包进行加速推理，模型推理速度得到多倍的提升。具体使用方法请参考 [TensorRT-LLM Demo](tensorrt_llm_demo/tensorrt_llm_cli_demo.py)
-和 官方技术文档。
++ [composite_demo](composite_demo/README.md): 在这里包含了
+    + GLM-4-9B-Chat 以及 GLM-4V-9B 开源模型的完整功能演示代码，包含了 All Tools 能力、长文档解读和多模态能力的展示。
+
++ [fintune_demo](finetune_demo/README.md): 在这里包含了
+    + PEFT (LORA, P-Tuning) 微调代码
+    + SFT 微调代码
+
+## 友情链接
+
++ [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory): 高效开源微调框架，已支持 GLM-4-9B-Chat 语言模型微调。
++ [SWIFT](https://github.com/modelscope/swift): 魔搭社区的大模型/多模态大模型训练框架，已支持 GLM4-9B-Chat/GLM4v-9B-Chat
+  模型微调。
++ [Xorbits Inference](https://github.com/xorbitsai/inference): 性能强大且功能全面的分布式推理框架，轻松一键部署你自己的模型或内置的前沿开源模型。
++ [self-llm](https://github.com/datawhalechina/self-llm/tree/master/GLM-4): Datawhale 团队的提供的 GLM-4-9B 系列模型使用教程。
+
+## 协议
+
++ GLM-4 模型的权重的使用则需要遵循 [模型协议](https://huggingface.co/THUDM/glm-4-9b/blob/main/LICENSE)。
+
++ 本开源仓库的代码则遵循 [Apache 2.0](LICENSE) 协议。
+
+请您严格遵循开源协议。
 
 ## 引用
 
 如果你觉得我们的工作有帮助的话，请考虑引用下列论文。
 
 ```
-@article{zeng2022glm,
-  title={Glm-130b: An open bilingual pre-trained model},
+@inproceedings{zeng2022glm,
+  title={{GLM-130B:} An Open Bilingual Pre-trained Model},
   author={Zeng, Aohan and Liu, Xiao and Du, Zhengxiao and Wang, Zihan and Lai, Hanyu and Ding, Ming and Yang, Zhuoyi and Xu, Yifan and Zheng, Wendi and Xia, Xiao and others},
-  journal={arXiv preprint arXiv:2210.02414},
-  year={2022}
+  booktitle={The Eleventh International Conference on Learning Representations,
+                  {ICLR} 2023, Kigali, Rwanda, May 1-5, 2023},
+  year= {2023},
 }
 ```
 
@@ -344,5 +273,16 @@ ChatGLM3-6B已经支持使用 TensorRT-LLM
   booktitle={Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages={320--335},
   year={2022}
+}
+```
+
+```
+@misc{wang2023cogvlm,
+      title={CogVLM: Visual Expert for Pretrained Language Models}, 
+      author={Weihan Wang and Qingsong Lv and Wenmeng Yu and Wenyi Hong and Ji Qi and Yan Wang and Junhui Ji and Zhuoyi Yang and Lei Zhao and Xixuan Song and Jiazheng Xu and Bin Xu and Juanzi Li and Yuxiao Dong and Ming Ding and Jie Tang},
+      year={2023},
+      eprint={2311.03079},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
 }
 ```

@@ -1,36 +1,39 @@
-# ChatGLM3-6B 微调
+# GLM-4-9B Chat 对话模型微调
 
-本目录提供 ChatGLM3-6B 模型的微调示例，包括全量微调和 P-Tuning v2。格式上，提供多轮对话微调样例和输入输出格式微调样例。
+Read this in [English](README_en.md)
 
-如果将模型下载到了本地，本文和代码中的 `THUDM/chatglm3-6b` 字段均应替换为相应地址以从本地加载模型。
+本 demo 中，你将体验到如何微调 GLM-4-9B-Chat 对话开源模型(不支持视觉理解模型)。 请严格按照文档的步骤进行操作，以避免不必要的错误。
 
-运行示例需要 `python>=3.10`，除基础的 `torch` 依赖外，示例代码运行还需要依赖。
+## 硬件检查
 
-**我们提供了 [示例notebook](lora_finetune.ipynb) 用于演示如何使用我们的微调代码。**
+**本文档的数据均在以下硬件环境测试,实际运行环境需求和运行占用的显存略有不同，请以实际运行环境为准。**
+测试硬件信息:
+
++ OS: Ubuntu 22.04
++ Memory: 512GB
++ Python: 3.10.12 / 3.12.3 (如果您使用 Python 3.12.3 目前需要使用 git 源码安装 nltk)
++ CUDA Version:  12.3
++ GPU Driver: 535.104.05
++ GPU: NVIDIA A100-SXM4-80GB * 8
+
+| 微调方案               | 显存占用                              | 权重保存点大小 |
+|--------------------|-----------------------------------|---------|
+| lora (PEFT)        | 21531MiB                          | 17M     |
+| p-tuning v2 (PEFT) | 21381MiB                          | 121M    |
+| SFT (Zero3 method) | 80935MiB<br/>(Each GPU，需要使用8张GPU) | 20G     |
+
+在开始微调之前，请你先安装`basic_demo`中的依赖，同时您需要安装本目录下的依赖项：
+
+> NOTE: NLTK 3.8.1 部分代码可能尚未对 python 3.12
+> 进行适配，该情况下的适配方法可参考[issues #38](https://github.com/THUDM/GLM-4/issues/38)
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## 测试硬件标准
-
-我们仅提供了单机多卡/多机多卡的运行示例，因此您需要至少一台具有多个 GPU 的机器。本仓库中的**默认配置文件**中，我们记录了显存的占用情况：
-
-+ SFT 全量微调: 4张显卡平均分配，每张显卡占用 `48346MiB` 显存。
-+ P-TuningV2 微调: 1张显卡，占用 `18426MiB` 显存。
-+ LORA 微调: 1张显卡，占用 `14082MiB` 显存。
-
-> 请注意，该结果仅供参考，对于不同的参数，显存占用可能会有所不同。请结合你的硬件情况进行调整。
-
-> 请注意，我们仅仅使用英伟达 Hopper(代表显卡：H100) 和 Ampère(代表显卡:A100) 架构和系列显卡做过测试。如果您使用其他架构的显卡，可能会出现
-> 1. 未知的训练问题 / 显存占用与上述有误差。
-> 2. 架构过低而不支持某些特性。
-> 3. 推理效果问题。
-     > 以上三种情况为社区曾经遇到过的问题，虽然概率极地，如果您遇到了以上问题，可以尝试在社区中解决。
-
 ## 多轮对话格式
 
-多轮对话微调示例采用 ChatGLM3 对话格式约定，对不同角色添加不同 `loss_mask` 从而在一遍计算中为多轮回复计算 `loss`。
+多轮对话微调示例采用 GLM-4 对话格式约定，对不同角色添加不同 `loss_mask` 从而在一遍计算中为多轮回复计算 `loss`。
 
 对于数据文件，样例采用如下格式
 
@@ -39,10 +42,19 @@ pip install -r requirements.txt
 ```json
 [
   {
-    "conversations": [
+    "messages": [
       {
         "role": "system",
-        "content": "<system prompt text>"
+        "content": "<system prompt text>",
+        "tools": [
+          {
+            "name": "<tool name>",
+            "args": {
+              "<arg name>": "<arg value>"
+            }
+          }
+          // Add more tools if needed
+        ]
       },
       {
         "role": "user",
@@ -52,7 +64,24 @@ pip install -r requirements.txt
         "role": "assistant",
         "content": "<assistant response text>"
       },
-      // ... Muti Turn
+      // If Tool Using
+      {
+        "role": "user",
+        "content": "<user prompt text>"
+      },
+      {
+        "role": "assistant",
+        "content": "<assistant response text>"
+      },
+      {
+        "role": "observation",
+        "content": "<observation prompt text>"
+      },
+      {
+        "role": "assistant",
+        "content": "<assistant response observation>"
+      },
+      // Multi_turns
       {
         "role": "user",
         "content": "<user prompt text>"
@@ -63,94 +92,34 @@ pip install -r requirements.txt
       }
     ]
   }
-  // ...
 ]
 ```
 
-**请注意，这种方法在微调的step较多的情况下会影响到模型的工具调用功能**
+这里是一个不带有工具的例子:
 
-如果您希望微调模型的对话和工具能力，您应该按照以下格式整理数据。
-
-```json
-[
-  {
-    "tools": [
-      // available tools, format is not restricted
-    ],
-    "conversations": [
-      {
-        "role": "system",
-        "content": "<system prompt text>"
-      },
-      {
-        "role": "user",
-        "content": "<user prompt text>"
-      },
-      {
-        "role": "assistant",
-        "content": "<assistant thought to text>"
-      },
-      {
-        "role": "tool",
-        "name": "<name of the tool to be called",
-        "parameters": {
-          "<parameter_name>": "<parameter_value>"
-        },
-        "observation": "<observation>"
-        // don't have to be string
-      },
-      {
-        "role": "assistant",
-        "content": "<assistant response to observation>"
-      },
-      // ... Muti Turn
-      {
-        "role": "user",
-        "content": "<user prompt text>"
-      },
-      {
-        "role": "assistant",
-        "content": "<assistant response text>"
-      }
-    ]
-  }
-  // ...
-]
+```
+{"messages": [{"role": "user", "content": "类型#裤*材质#牛仔布*风格#性感"}, {"role": "assistant", "content": "3x1的这款牛仔裤采用浅白的牛仔面料为裤身材质，其柔然的手感和细腻的质地，在穿着舒适的同时，透露着清纯甜美的个性气质。除此之外，流畅的裤身剪裁将性感的腿部曲线彰显的淋漓尽致，不失为一款随性出街的必备单品。"}]}
 ```
 
-- 关于工具描述的 system prompt 无需手动插入，预处理时会将 `tools` 字段使用 `json.dumps(..., ensure_ascii=False)`
-  格式化后插入为首条 system prompt。
+这是一个带有工具调用的例子:
 
-- 每种角色可以附带一个 `bool` 类型的 `loss` 字段，表示该字段所预测的内容是否参与 `loss`
-  计算。若没有该字段，样例实现中默认对 `system`, `user` 不计算 `loss`，其余角色则计算 `loss`。
-
-- `tool` 并不是 ChatGLM3 中的原生角色，这里的 `tool` 在预处理阶段将被自动转化为一个具有工具调用 `metadata` 的 `assistant`
-  角色（默认计算 `loss`）和一个表示工具返回值的 `observation` 角色（不计算 `loss`）。
-
-- 目前暂未实现 `Code interpreter` 的微调任务。
+```
+{"messages": [{"role": "system", "content": "", "tools": [{"type": "function", "function": {"name": "get_recommended_books", "description": "Get recommended books based on user's interests", "parameters": {"type": "object", "properties": {"interests": {"type": "array", "items": {"type": "string"}, "description": "The interests to recommend books for"}}, "required": ["interests"]}}}]}, {"role": "user", "content": "Hi, I am looking for some book recommendations. I am interested in history and science fiction."}, {"role": "assistant", "content": "{\"name\": \"get_recommended_books\", \"arguments\": {\"interests\": [\"history\", \"science fiction\"]}}"}, {"role": "observation", "content": "{\"books\": [\"Sapiens: A Brief History of Humankind by Yuval Noah Harari\", \"A Brief History of Time by Stephen Hawking\", \"Dune by Frank Herbert\", \"The Martian by Andy Weir\"]}"}, {"role": "assistant", "content": "Based on your interests in history and science fiction, I would recommend the following books: \"Sapiens: A Brief History of Humankind\" by Yuval Noah Harari, \"A Brief History of Time\" by Stephen Hawking, \"Dune\" by Frank Herbert, and \"The Martian\" by Andy Weir."}]}
+```
 
 - `system` 角色为可选角色，但若存在 `system` 角色，其必须出现在 `user`
   角色之前，且一个完整的对话数据（无论单轮或者多轮对话）只能出现一次 `system` 角色。
-
-## 数据集格式示例
-
-这里以 AdvertiseGen 数据集为例,
-您可以从 [Google Drive](https://drive.google.com/file/d/13_vf0xRTQsyneRKdD1bZIr93vBGOczrk/view?usp=sharing)
-或者 [Tsinghua Cloud](https://cloud.tsinghua.edu.cn/f/b3f119a008264b1cabd1/?dl=1) 下载 AdvertiseGen 数据集。
-将解压后的 AdvertiseGen 目录放到 `data` 目录下并自行转换为如下格式数据集。
-
-> 请注意，现在的微调代码中加入了验证集，因此，对于一组完整的微调数据集，必须包含训练数据集和验证数据集，测试数据集可以不填写。或者直接用验证数据集代替。
-
-```
-{"conversations": [{"role": "user", "content": "类型#裙*裙长#半身裙"}, {"role": "assistant", "content": "这款百搭时尚的仙女半身裙，整体设计非常的飘逸随性，穿上之后每个女孩子都能瞬间变成小仙女啦。料子非常的轻盈，透气性也很好，穿到夏天也很舒适。"}]}
-```
+- `tools` 字段为可选字段，若存在 `tools` 字段，其必须出现在 `system`
+  角色之后，且一个完整的对话数据（无论单轮或者多轮对话）只能出现一次 `tools` 字段。当 `tools` 字段存在时，`system`
+  角色必须存在并且 `content` 字段为空。
 
 ## 配置文件
 
 微调配置文件位于 `config` 目录下，包括以下文件：
 
 1. `ds_zereo_2 / ds_zereo_3.json`: deepspeed 配置文件。
-2. `lora.yaml / ptuning.yaml / sft.yaml`: 模型不同方式的配置文件，包括模型参数、优化器参数、训练参数等。 部分重要参数解释如下：
+2. `lora.yaml / ptuning_v2
+3. .yaml / sft.yaml`: 模型不同方式的配置文件，包括模型参数、优化器参数、训练参数等。 部分重要参数解释如下：
     + data_config 部分
         + train_file: 训练数据集的文件路径。
         + val_file: 验证数据集的文件路径。
@@ -176,53 +145,61 @@ pip install -r requirements.txt
     + generation_config 部分
         + max_new_tokens: 生成的最大新 token 数量。
     + peft_config 部分
-        + peft_type: 使用的参数有效调整类型（如 LORA）。
-        + task_type: 任务类型，这里是因果语言模型（CAUSAL_LM）。
+        + peft_type: 使用的参数有效调整类型 (支持 LORA 和 PREFIX_TUNING)。
+        + task_type: 任务类型，这里是因果语言模型 (不要改动)。
     + Lora 参数：
         + r: LoRA 的秩。
         + lora_alpha: LoRA 的缩放因子。
-        + lora_dropout: 在 LoRA 层使用的 dropout 概率
+        + lora_dropout: 在 LoRA 层使用的 dropout 概率。
     + P-TuningV2 参数：
         + num_virtual_tokens: 虚拟 token 的数量。
+        + num_attention_heads: 2: P-TuningV2 的注意力头数(不要改动)。
+        + token_dim: 256: P-TuningV2 的 token 维度(不要改动)。
 
 ## 开始微调
 
-通过以下代码执行 **单机多卡/多机多卡** 运行。
+通过以下代码执行 **单机多卡/多机多卡** 运行，这是使用 `deepspeed` 作为加速方案的，您需要安装 `deepspeed`。
 
-```angular2html
-cd finetune_demo
-OMP_NUM_THREADS=1 torchrun --standalone --nnodes=1 --nproc_per_node=8  finetune_hf.py  data/AdvertiseGen/  THUDM/chatglm3-6b  configs/lora.yaml  --deepspeed ds_zero_2.json
+```shell
+OMP_NUM_THREADS=1 torchrun --standalone --nnodes=1 --nproc_per_node=8  finetune_hf.py  data/AdvertiseGen/  THUDM/glm-4-9b  configs/lora.yaml
 ```
 
 通过以下代码执行 **单机单卡** 运行。
 
-```angular2html
-cd finetune_demo
-python finetune_hf.py  data/AdvertiseGen/  THUDM/chatglm3-6b  configs/lora.yaml
+```shell
+python finetune.py  data/AdvertiseGen/  THUDM/glm-4-9b-chat  configs/lora.yaml
 ```
 
-单机及多机的第四参数(no)为是否断点继训,可输入类型有三种  
-1:no 直接重新训练  
-2:yes 自动从最后一个保存的 Checkpoint开始训练  
-3:XX 断点号数字 例 600 则从序号600 Checkpoint开始训练
+## 从保存点进行微调
+
+如果按照上述方式进行训练，每次微调都会从头开始，如果你想从训练一半的模型开始微调，你可以加入第四个参数，这个参数有两种传入方式:
+
+1. `yes`, 自动从最后一个保存的 Checkpoint开始训练
+2. `XX`, 断点号数字 例 `600` 则从序号600 Checkpoint开始训练
+
+例如，这就是一个从最后一个保存点继续微调的示例代码
+
+```shell
+python finetune.py  data/AdvertiseGen/  THUDM/glm-4-9b-chat  configs/lora.yaml yes
+```
 
 ## 使用微调后的模型
 
-### 在 inference_hf.py 中验证微调后的模型
+### 在 inference.py 中验证微调后的模型
 
-您可以在 `finetune_demo/inference_hf.py` 中使用我们的微调后的模型，仅需要一行代码就能简单的进行测试。
+您可以在 `finetune_demo/inference.py` 中使用我们的微调后的模型，仅需要一行代码就能简单的进行测试。
 
-```angular2html
-python inference_hf.py your_finetune_path --prompt your prompt
+```shell
+python inference.py your_finetune_path
 ```
 
 这样，得到的回答就微调后的回答了。
 
 ### 在本仓库的其他 demo 或者外部仓库使用微调后的模型
 
-您可以在任何一个 demo 内使用我们的 `lora` 和 全参微调的模型。这需要你自己按照以下教程进行修改代码。
+您可以在任何一个 demo 内使用我们的 `LORA` 和 全参微调的模型。这需要你自己按照以下教程进行修改代码。
 
-1. 使用`finetune_demo/inference_hf.py`中读入模型的方式替换 demo 中读入模型的方式。
+1. 使用`finetune_demo/inference.py`中读入模型的方式替换 demo 中读入模型的方式。
 
 > 请注意，对于 LORA 和 P-TuningV2 我们没有合并训练后的模型，而是在`adapter_config.json`
 > 中记录了微调型的路径，如果你的原始模型位置发生更改，则你应该修改`adapter_config.json`中`base_model_name_or_path`的路径。
@@ -251,64 +228,7 @@ def load_model_and_tokenizer(
 2. 读取微调的模型，请注意，你应该使用微调模型的位置，例如，若你的模型位置为`/path/to/finetune_adapter_model`
    ，原始模型地址为`path/to/base_model`,则你应该使用`/path/to/finetune_adapter_model`作为`model_dir`。
 3. 完成上述操作后，就能正常使用微调的模型了，其他的调用方式没有变化。
-
-### 提示
-
-1. 微调代码在开始训练前，会先打印首条训练数据的预处理信息(默认已经注释，可以解除注释)，显示为
-
-```log
-Sanity
-Check >> >> >> >> >> >> >
-'[gMASK]': 64790 ->   -100
-'sop': 64792 ->   -100
-'<|system|>': 64794 ->   -100
-'': 30910 ->   -100
-'\n': 13 ->   -100
-'Answer': 20115 ->   -100
-'the': 267 ->   -100
-'following': 1762 ->   -100
-...
-'know': 683 ->   -100
-'the': 267 ->   -100
-'response': 3010 ->   -100
-'details': 3296 ->   -100
-'.': 30930 ->   -100
-'<|assistant|>': 64796 ->   -100
-'': 30910 ->  30910
-'\n': 13 ->     13
-'I': 307 ->    307
-'need': 720 ->    720
-'to': 289 ->    289
-'use': 792 ->    792
-...
-<< << << << << << < Sanity
-Check
-```
-
-字样，每行依次表示一个 detokenized string, token_id 和 target_id。其中，`target_id`为`token_id`在模型词表中的索引，`-100`表示该
-token 不参与 `loss` 计算。
-
-2. `_prepare_model_for_training` 的作用是遍历模型的所有可训练参数，并确保它们的数据类型为`torch.float32`。
-   这在某些情况下是必要的，因为混合精度训练或其他操作可能会更改模型参数的数据类型。该代码默打开，可以注释，但是如果使用
-   `half` 格式训练出现问题，可以切换回这个代码，显存可能增加。
-3. 在我们的[Huggingface模型代码](https://huggingface.co/THUDM/chatglm3-6b/blob/main/modeling_chatglm.py)中，有以下内容：
-    ```python
-   if self.gradient_checkpointing and self.training:
-                layer_ret = torch.utils.checkpoint.checkpoint(
-                    layer,
-                    hidden_states,
-                    attention_mask,
-                    rotary_pos_emb,
-                    kv_caches[index],
-                    use_cache,
-                    use_reentrant=False
-                )
-   ```
-   这可能导致训练的时候显存增加，因此，如果您的显存不足，可以尝试将``` use_reentrant``` 修改为`True`。
-4. 微调后的模型可以使用任何支持 `peft` 载入的模型加速框架，在这里，我们没有提供demo。
-5. 本仓库的微调数据集格式与 API 微调数据集格式有一定区别
-   + ZhipuAI API 微调数据集中的 `messages` 字段在本仓库为 `conversation` 字段。
-   + ZhipuAI API 中的微调文件为 `jsonl`, 在本仓库，需要简单的将文件名改为 `json`。
+4. 本微调脚本没有测试过128K 1M等长文本的微调，长文本的微调需要更大显存的GPU设备，并且需要更高效的微调方案,需要开发者自行解决。
 
 ## 参考文献
 
